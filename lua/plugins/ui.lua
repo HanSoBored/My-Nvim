@@ -1,10 +1,11 @@
 return {
-	-- Colorscheme
-	{
-		"folke/tokyonight.nvim",
-		lazy = true,
-		opts = { style = "night" },
-	},
+	-- Colorschemes
+	{ "folke/tokyonight.nvim", lazy = true, opts = { style = "night" } },
+	{ "catppuccin/nvim", name = "catppuccin", lazy = true },
+	{ "ellisonleao/gruvbox.nvim", lazy = true },
+	{ "rebelot/kanagawa.nvim", lazy = true },
+	{ "navarasu/onedark.nvim", lazy = true },
+	{ "sainnhe/everforest", lazy = true },
 
 	-- Status line
 	{

@@ -41,3 +41,64 @@ map("n", "]q", "<cmd>cnext<cr>", { desc = "Next Quickfix" })
 -- C/C++ specific
 map("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", { desc = "Switch Header/Source" })
 map("n", "<leader>cs", "<cmd>!ctags -R .<cr>", { desc = "Generate ctags" })
+
+-- Theme switching
+local themes = { "tokyonight", "catppuccin", "gruvbox", "kanagawa", "onedark", "everforest" }
+local theme_file = vim.fn.stdpath("config") .. "/.theme"
+
+local function save_theme(theme)
+  local f = io.open(theme_file, "w")
+  if f then
+    f:write(theme)
+    f:close()
+  end
+end
+
+local function load_theme()
+  local f = io.open(theme_file, "r")
+  if f then
+    local theme = f:read("*all")
+    f:close()
+    vim.cmd.colorscheme(theme)
+    return theme
+  end
+  return nil
+end
+
+local function get_theme_index(theme)
+  for i, t in ipairs(themes) do
+    if t == theme then
+      return i
+    end
+  end
+  return 1
+end
+
+local current_theme_index = 1
+
+map("n", "<leader>ut", function()
+  vim.ui.input({
+    prompt = "Enter colorscheme: ",
+    default = "tokyonight",
+    completion = "colorscheme",
+  }, function(input)
+    if input then
+      vim.cmd.colorscheme(input)
+      save_theme(input)
+    end
+  end)
+end, { desc = "Select Colorscheme" })
+
+map("n", "<leader>tn", function()
+  current_theme_index = (current_theme_index % #themes) + 1
+  local theme = themes[current_theme_index]
+  vim.cmd.colorscheme(theme)
+  save_theme(theme)
+end, { desc = "Next Colorscheme" })
+
+map("n", "<leader>tp", function()
+  current_theme_index = ((current_theme_index - 2 + #themes) % #themes) + 1
+  local theme = themes[current_theme_index]
+  vim.cmd.colorscheme(theme)
+  save_theme(theme)
+end, { desc = "Previous Colorscheme" })
